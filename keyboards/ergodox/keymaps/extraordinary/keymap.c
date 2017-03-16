@@ -264,7 +264,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
         case LSpec:
         if (record->event.pressed) {                                     // when the LSpec button is pressed
-            if(symb_shift) symb_lock == !symb_lock;                      // if another layer button is engaged, then
+            if(symb_shift) symb_lock = !symb_lock;                       // if another layer button is engaged, then
             else if(mdia_shift) mdia_lock = !mdia_lock;                  // lock that layer, be it caps or symb or mdia
             else if (record->tap.count && !record->tap.interrupted && (!spec_shift)) {
                 register_code(KC_GRV);                                   // otherwise, if it's an uninterrupted tap, emit a char
