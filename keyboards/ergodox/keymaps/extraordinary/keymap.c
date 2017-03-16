@@ -44,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------------+------+------+------+------+-------------|       |------+------+------+------+------+------+------------|
  * | Media  Tab |   Q  |   W  |   E  |   R  |   T  |   [  |       |  ]   |   Y  |   U  |   I  |   O  |   P  | \|   Media |
  * |------------+------+------+------+------+------|      |       |      |------+------+------+------+------+------------|
- * | Symbol     |   A  |   S  |   D  |   F  |   G  |------|       |------|   H  |   J  |   K  |   L  |  ;   | '"  Symbol |
+ * | Symbol Esc |   A  |   S  |   D  |   F  |   G  |------|       |------|   H  |   J  |   K  |   L  |  ;   | '"  Symbol |
  * |------------+------+------+------+------+------|Shift |       | Tab  |------+------+------+------+------+------------|
  * | Capitals   |   Z  |   X  |   C  |   V  |   B  | -Tab |       |      |   N  |   M  |   ,  |   .  |  /   |   Capitals |
  * `------------+------+------+------+------+-------------'       `-------------+------+------+------+------+------------'
@@ -62,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // left hand
  F(LSpec)  ,KC_1   ,KC_2   ,KC_3   ,KC_4  ,KC_5  ,KC_ESC
 ,F(LMdia)  ,KC_Q   ,KC_W   ,KC_E   ,KC_R  ,KC_T  ,KC_LBRC
-,M(LSymb)  ,KC_A   ,KC_S   ,KC_D   ,KC_F  ,KC_G
+,F(LSymb)  ,KC_A   ,KC_S   ,KC_D   ,KC_F  ,KC_G
 ,KC_LSFT   ,KC_Z   ,KC_X   ,KC_C   ,KC_V  ,KC_B  ,LSFT(KC_TAB)
 ,KC_LCTL   ,KC_MEH ,KC_HYPR,KC_LALT,KC_LGUI
                                          ,KC_HOME,KC_END
@@ -232,14 +232,22 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
         // only because sometimes rapid pressing led to irregular events; this way the states
         // are self healing during use.
 
-        case LSymb:                                               //
-        if (record->event.pressed) {                              // when the LSymb button is pressed
-            if(++symb_shift > 2) mdia_shift = 2;                  // increment the symb shift count, max two
-            if(spec_shift) symb_lock = !symb_lock;                // if the Special layer is on, toggle the shift lock
-            layer_on(SYMB);                                       // in any case, turn on the Symbols layer
-        } else {                                                  // when the LSymb button is released
-            if(--symb_shift < 0) symb_shift = 0;                  // decrement the shift count, minimum zero
-            if((!symb_shift) && (!symb_lock)) layer_off(SYMB);    // if both shifts are released and the lock is off, turn off the Symbols layer
+        case LSymb:
+        if (record->event.pressed) {                                // when the LSymb button is pressed
+            if (record->tap.count && (!symb_shift) && (!symb_lock) && (!spec_shift)) {
+                register_code(KC_ESC);                              // if it's an uninterrupted tap, emit a char
+            } else {
+                if(++symb_shift > 2) symb_shift = 2;                // otherwise, increment the symb shift count, max two
+                if(spec_shift) symb_lock = !symb_lock;              // if the Special layer is on, toggle the shift lock
+                layer_on(SYMB);                                     // in any case, turn on the Symbols layer
+            }
+        } else {                                                    // when the LSymb button is released
+            if(record->tap.count && (!symb_shift) && (!symb_lock) && (!spec_shift)) {
+                unregister_code(KC_ESC);
+            } else {
+                if(--symb_shift < 0) symb_shift = 0;                // decrement the shift count, minimum zero
+                if((!symb_shift) && (!symb_lock)) layer_off(SYMB);  // if both shifts are released and the lock is off, turn off the Symbols layer
+            }
         }
         break;
 
