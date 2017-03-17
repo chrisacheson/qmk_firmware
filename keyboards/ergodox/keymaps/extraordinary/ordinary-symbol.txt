@@ -22,5 +22,5 @@
 [{h:2},"< Del\n\n\nBackspace",{h:2},"Del >\n\n\nDelete","Page\n\n\n\n\n\nUp"],
 [{x:2},"Page\n\n\n\n\n\nDown"],
 [{r:-30,rx:13,y:-1,x:-3},"Left","Right"],
-[{x:-3},"Up",{h:2},"Enter",{h:2},"Space"],
+[{x:-3},"Up",{h:2},"Enter",{h:2},"_\n\n\nUnderscore"],
 [{x:-3},"Down"]

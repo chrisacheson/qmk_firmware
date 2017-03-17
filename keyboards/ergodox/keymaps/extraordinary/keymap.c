@@ -96,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                         | Home | End  |       | Left | Right|
  *                                  ,------|------|------|       |------+------+------.
  *                                  |      |      | PgUp |       |  Up  |      |      |
- *                                  |Backsp| Del  |------|       |------| Enter| Space|
+ *                                  |Backsp| Del  |------|       |------| Enter|  _   |
  *                                  |      |      | PgDn |       | Down |      |      |
  *                                  `--------------------'       `--------------------'
  */
@@ -118,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                        ,KC_0  ,KC_DOT ,KC_EQL,KC_PLUS ,KC_ENT
                                                                  ,KC_LEFT     ,KC_RGHT
                                                                  ,KC_UP
-                                                                 ,KC_DOWN     ,KC_ENT  ,KC_SPC
+                                                                 ,KC_DOWN     ,KC_ENT  ,LSFT(KC_MINS)
 ),
 
 /******* Media Layer *******************************************************************************************************
